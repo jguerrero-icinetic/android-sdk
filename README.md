@@ -15,7 +15,7 @@ allprojects {
 Then, add the library to your module `build.gradle`
 ```gradle
 dependencies {
-    implementation 'com.github.xxx'
+    compile 'com.github.xxx'
 }
 ```
 

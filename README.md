@@ -38,8 +38,8 @@ AplazameSDK.checkAvailability(Double amount, String currency, AvailabilityCallba
 AplazameSDK.checkAvailability(Checkout checkout, AvailabilityCallback responseCallback)
 ```
 Both use the **AvailabilityCallback** interface with these 3 methods:
-- `onAvailabilitySuccess`: Aplazame is available
-- `onAvailabilityFailure`: Aplazame is not available
+- `onAvailable`: Aplazame is available
+- `onNotAvailable`: Aplazame is not available
 - `onFailure`: Unknown error. It could be a timeout, Internet not available, so on.
 
 Initialize the checkout in a WebView
@@ -234,12 +234,12 @@ AplazameSDK.setConfiguration("my public key", true)
 ```java
 AplazameSDK.checkAvailability(createCheckout(), new AvailabilityCallback() {
             @Override
-            public void onAvailabilitySuccess() {
+            public void onAvailable() {
                 // Enable checkout button for instance
             }
 
             @Override
-            public void onAvailabilityFailure() {
+            public void onNotAvailable() {
                 // Hide the checkout button for instance
             }
 

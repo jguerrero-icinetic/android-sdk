@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                      */
                     AplazameSDK.checkAvailability(createCheckout(), new AvailabilityCallback() {
                         @Override
-                        public void onAvailabilitySuccess() {
+                        public void onAvailable() {
                             // Enable checkout button for instance
                             progressBar.setVisibility(View.GONE);
                             layerButton.setVisibility(View.GONE);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onAvailabilityFailure() {
+                        public void onNotAvailable() {
                             // Hide the checkout button for instance
                             progressBar.setVisibility(View.GONE);
                             layerButton.setVisibility(View.VISIBLE);

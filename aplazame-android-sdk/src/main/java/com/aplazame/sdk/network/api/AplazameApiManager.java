@@ -109,9 +109,9 @@ public class AplazameApiManager {
             @Override
             public void onResponse(Call<CheckoutAvailabilityDto> call, Response<CheckoutAvailabilityDto> response) {
                 if (response.isSuccessful() && response.body().isAllowed()) {
-                    callback.onAvailabilitySuccess();
+                    callback.onAvailable();
                 } else {
-                    callback.onAvailabilityFailure();
+                    callback.onNotAvailable();
                 }
             }
 

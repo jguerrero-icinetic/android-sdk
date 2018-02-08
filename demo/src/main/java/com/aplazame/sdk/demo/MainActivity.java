@@ -70,13 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!accessToken.getText().toString().trim().isEmpty()) {
                     AplazameSDK.setConfiguration(accessToken.getText().toString().trim(), DEBUG);
 
-                    /*
-                        You can overload this method with
-                        AplazameSDK.checkAvailability(Double amount, String currency, AvailabilityCallback responseCallback)
-                        After that, to use the checkout, you must use this method:
-                        AplazameSDK.setCheckout(Checkout checkout);
-                     */
-                    AplazameSDK.checkAvailability(createCheckout(), new AvailabilityCallback() {
+                    AplazameSDK.checkAvailability(120.50, "EUR", new AvailabilityCallback() {
                         @Override
                         public void onAvailable() {
                             // Enable checkout button for instance
@@ -103,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, getString(R.string.aplazame_unavailable_error), Toast.LENGTH_SHORT).show();
                         }
                     });
+                    AplazameSDK.setCheckout(createCheckout());
                 }
             }
         });

@@ -27,17 +27,12 @@ First at all you need to configure AplazameSDK with your public token and the en
 AplazameSDK.setConfiguration(String token, boolean debug)
 ```
 
-Then you can check if Aplazame is available for your order. There are two ways to do this:
+Then you can check if Aplazame is available for your order:
 
-1) The first is to use only the total amount of the order and the initials of the currency
 ```java
 AplazameSDK.checkAvailability(Double amount, String currency, AvailabilityCallback responseCallback)
 ```
-2) The second is to use a Checkout object
-```java
-AplazameSDK.checkAvailability(Checkout checkout, AvailabilityCallback responseCallback)
-```
-Both use the **AvailabilityCallback** interface with these 3 methods:
+The **AvailabilityCallback** contains the following 3 methods:
 - `onAvailable`: Aplazame is available
 - `onNotAvailable`: Aplazame is not available
 - `onFailure`: Unknown error. It could be a timeout, Internet not available, so on.
@@ -232,7 +227,7 @@ AplazameSDK.setConfiguration("my public key", true)
 ```
 3) Check Aplazame available
 ```java
-AplazameSDK.checkAvailability(createCheckout(), new AvailabilityCallback() {
+AplazameSDK.checkAvailability(2000.0, "EUR", new AvailabilityCallback() {
             @Override
             public void onAvailable() {
                 // Enable checkout button for instance

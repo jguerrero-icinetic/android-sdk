@@ -22,12 +22,6 @@ public class AplazameSDK {
         aplazameApiManager = new AplazameApiManager(token, debug);
     }
 
-    public static void checkAvailability(Checkout checkoutAvailability, AvailabilityCallback responseCallback) {
-        checkAplazameSdkConfiguration();
-        checkout = checkoutAvailability;
-        aplazameApiManager.checkAvailability(checkout, responseCallback);
-    }
-
     public static void checkAvailability(Double amount, String currency, AvailabilityCallback responseCallback) {
         checkAplazameSdkConfiguration();
         aplazameApiManager.checkAvailability(amount, currency, responseCallback);

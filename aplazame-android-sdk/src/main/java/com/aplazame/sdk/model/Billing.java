@@ -1,27 +1,15 @@
 package com.aplazame.sdk.model;
 
-public class Billing {
+import com.aplazame.sdk.network.utils.MapperUtils;
 
-    private final String firstName;
-    private final String lastName;
+import java.util.Locale;
 
-    private final Address address;
+public class Billing extends Address {
 
-    public Billing(String firstName, String lastName, Address address) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-    }
+    public String first_name;
+    public String last_name;
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public Address getAddress() {
-        return address;
+    public void setCountry(Locale country) {
+        this.country = MapperUtils.localeCountryToString(country);
     }
 }

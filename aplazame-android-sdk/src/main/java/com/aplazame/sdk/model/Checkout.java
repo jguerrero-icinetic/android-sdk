@@ -1,38 +1,20 @@
 package com.aplazame.sdk.model;
 
+import com.aplazame.sdk.BuildConfig;
+
 public class Checkout {
+    String metaVersion = BuildConfig.VERSION_NAME;
 
-    private final Merchant merchant;
-    private final Order order;
-    private final Customer customer;
-    private final Billing billing;
-    private final Shipping shipping;
+    public boolean toc;
+    public Merchant merchant;
+    public Order order;
+    public Customer customer;
+    public Billing billing;
+    public Shipping shipping;
+    public Meta meta;
 
-    public Checkout(Merchant merchant, Order order, Customer customer, Billing billing, Shipping shipping) {
-        this.merchant = merchant;
-        this.order = order;
-        this.customer = customer;
-        this.billing = billing;
-        this.shipping = shipping;
-    }
-
-    public Merchant getMerchant() {
-        return merchant;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public Billing getBilling() {
-        return billing;
-    }
-
-    public Shipping getShipping() {
-        return shipping;
+    public Checkout() {
+        meta = new Meta();
+        meta.version = metaVersion;
     }
 }

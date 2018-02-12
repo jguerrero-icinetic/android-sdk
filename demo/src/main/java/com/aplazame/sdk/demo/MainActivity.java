@@ -23,6 +23,7 @@ import com.aplazame.sdk.model.Shipping;
 import com.aplazame.sdk.model.enums.CustomerGender;
 import com.aplazame.sdk.model.enums.CustomerType;
 import com.aplazame.sdk.network.response.AvailabilityCallback;
+import com.aplazame.sdk.network.utils.MapperUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -153,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         billing.postcode = "28020";
         billing.street = "Torre Picasso, Plaza Pablo Ruiz Picasso 1";
         billing.address_addition = "Esquina";
-        billing.setCountry(Locale.US);
+        billing.country = "ES";
         billing.phone = "555555555";
         billing.alt_phone = "666666666";
         billing.last_name = "Costello";
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         address.postcode = "28020";
         address.street = "Torre Picasso, Plaza Pablo Ruiz Picasso 1";
         address.address_addition = "Esquina";
-        address.setCountry(Locale.US);
+        address.country = "ES";
         address.phone = "555555555";
         address.alt_phone = "666666666";
 
@@ -185,10 +186,9 @@ public class MainActivity extends AppCompatActivity {
         customer.email = "dev@aplazame.com";
         customer.id = String.valueOf(Math.abs(new Random().nextInt() * 100000));
         customer.type = CustomerType.EXISTING.getValue();
-        customer.setDateJoined(new Date(System.currentTimeMillis()));
-        customer.setBirthday(dateBirthday);
-        customer.setLastLogin(new Date(System.currentTimeMillis()));
-        customer.setLanguage(Locale.getDefault());
+        customer.date_joined = MapperUtils.dateToString(new Date(System.currentTimeMillis()));
+        customer.birthday = MapperUtils.dateToString(dateBirthday);
+        customer.last_login = MapperUtils.dateToString(new Date(System.currentTimeMillis()));
         customer.first_name = "Frank";
         customer.last_name = "Costello";
         customer.address = address;
@@ -203,16 +203,16 @@ public class MainActivity extends AppCompatActivity {
         shipping.postcode = "28020";
         shipping.street = "Torre Picasso, Plaza Pablo Ruiz Picasso 1";
         shipping.address_addition = "Esquina";
-        shipping.setCountry(Locale.US);
+        shipping.country = "ES";
         shipping.phone = "555555555";
         shipping.alt_phone = "666666666";
         shipping.first_name = "Fernando";
         shipping.last_name = "Cabello";
         shipping.name = "Fernando Envío";
-        shipping.setPrice(10.0);
-        shipping.setTaxRate(0.21);
-        shipping.setDiscount(1.0);
-        shipping.setDiscountRate(1.0);
+        shipping.price = MapperUtils.doubleToDecimal(10.0);
+        shipping.tax_rate = MapperUtils.doubleToDecimal(0.21);
+        shipping.discount = MapperUtils.doubleToDecimal(1.0);
+        shipping.discount_rate = MapperUtils.doubleToDecimal(1.0);
 
         return shipping;
     }
@@ -222,38 +222,38 @@ public class MainActivity extends AppCompatActivity {
 
         Article article1 = new Article();
         article1.id = "id1";
-        article1.setDiscountRate(0.0);
+        article1.discount_rate = MapperUtils.doubleToDecimal(0.0);
         article1.name = "RELOJ EN ORO BLANCO DE 18 QUILATES Y DIAMANTES";
-        article1.setDiscount(0.0);
+        article1.discount = MapperUtils.doubleToDecimal(0.0);
         article1.description = "description";
-        article1.setTaxRate(0.0);
+        article1.tax_rate = MapperUtils.doubleToDecimal(0.0);
         article1.quantity = 2;
         article1.image_url = "https://i.imgur.com//CZ5UPbl.jpg";
-        article1.setPrice(39.93);
+        article1.price = MapperUtils.doubleToDecimal(39.93);
         article1.url = "http://www.chanel.com/es_ES/Relojeria/relojes_joyer%C3%ADa#reloj-en-oro-blanco-de-18-quilates-y-diamantes-J10211";
 
         Article article2 = new Article();
         article2.id = "id2";
-        article2.setDiscountRate(0.0);
+        article2.discount_rate = MapperUtils.doubleToDecimal(0.0);
         article2.name = "N°5 EAU PREMIERE SPRAY";
-        article2.setDiscount(0.0);
+        article2.discount = MapperUtils.doubleToDecimal(0.0);
         article2.description = "description";
-        article2.setTaxRate(0.0);
+        article2.tax_rate = MapperUtils.doubleToDecimal(0.0);
         article2.quantity = 1;
         article2.image_url = "https://i.imgur.com//1nIay4X.jpg";
-        article2.setPrice(35.09);
+        article2.price = MapperUtils.doubleToDecimal(35.09);
         article2.url = "https://www.chanel.com/en_US/fragrance-beauty/fragrance-no5-no5-88145/sku/138083";
 
         Article article3 = new Article();
         article3.id = "id3";
-        article3.setDiscountRate(0.0);
+        article3.discount_rate = MapperUtils.doubleToDecimal(0.0);
         article3.name = "ILLUSION D'OMBRE";
-        article3.setDiscount(0.0);
+        article3.discount = MapperUtils.doubleToDecimal(0.0);
         article3.description = "description";
-        article3.setTaxRate(0.0);
+        article3.tax_rate = MapperUtils.doubleToDecimal(0.0);
         article3.quantity = 1;
         article3.image_url = "https://i.imgur.com//4j2ib6w.jpg";
-        article3.setPrice(15.73);
+        article3.price = MapperUtils.doubleToDecimal(15.73);
         article3.url = "https://www.chanel.com/en_US/fragrance-beauty/makeup-eyeshadow-illusion-d%27ombre-122567";
 
         articles.add(article1);
@@ -261,14 +261,14 @@ public class MainActivity extends AppCompatActivity {
         articles.add(article3);
 
         Order order = new Order();
-        order.setTotalAmount(20.00);
-        order.setCurrency(Currency.getInstance(Locale.getDefault()));
-        order.setDiscount(3.62);
-        order.setDiscountRate(1.0);
-        order.setCartRate(1.0);
-        order.setCartDiscountRate(1.0);
+        order.total_amount = MapperUtils.doubleToDecimal(20.00);
+        order.currency = "EUR";
+        order.discount = MapperUtils.doubleToDecimal(3.62);
+        order.discount_rate = MapperUtils.doubleToDecimal(1.0);
+        order.cart_rate = MapperUtils.doubleToDecimal(1.0);
+        order.discount_rate = MapperUtils.doubleToDecimal(1.0);
         order.id = String.valueOf(Math.abs(new Random().nextInt() * 100000));
-        order.setTaxRate(0.21);
+        order.tax_rate = MapperUtils.doubleToDecimal(0.21);
         order.articles = articles;
 
         return order;

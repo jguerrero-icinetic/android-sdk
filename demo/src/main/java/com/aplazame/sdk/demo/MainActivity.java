@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Checkout createCheckout() {
         Checkout checkout = new Checkout();
+        checkout.toc = true;
         checkout.merchant = createMerchant();
         checkout.order = createOrder();
         checkout.customer = createCustomer();
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         customer.id = String.valueOf(Math.abs(new Random().nextInt() * 100000));
         customer.type = CustomerType.EXISTING.getValue();
         customer.date_joined = MapperUtils.dateToString(new Date(System.currentTimeMillis()));
-        customer.birthday = MapperUtils.dateToString(dateBirthday);
+        customer.birthday = MapperUtils.dateBirthdayToString(dateBirthday);
         customer.last_login = MapperUtils.dateToString(new Date(System.currentTimeMillis()));
         customer.first_name = "Frank";
         customer.last_name = "Costello";

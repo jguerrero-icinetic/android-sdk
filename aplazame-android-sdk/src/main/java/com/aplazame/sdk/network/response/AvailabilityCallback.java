@@ -2,9 +2,9 @@ package com.aplazame.sdk.network.response;
 
 public interface AvailabilityCallback {
 
-    void onAvailabilitySuccess();
+    void onAvailable();
 
-    void onAvailabilityFailure();
+    void onNotAvailable();
 
     void onFailure();
 }

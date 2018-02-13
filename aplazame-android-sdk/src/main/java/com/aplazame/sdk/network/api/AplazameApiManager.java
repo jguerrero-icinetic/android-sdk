@@ -2,9 +2,7 @@ package com.aplazame.sdk.network.api;
 
 import com.aplazame.sdk.model.Checkout;
 import com.aplazame.sdk.network.authenticator.AuthInterceptor;
-import com.aplazame.sdk.network.mapper.CheckoutToCheckoutDtoMapper;
 import com.aplazame.sdk.network.model.CheckoutAvailabilityDto;
-import com.aplazame.sdk.network.model.CheckoutDto;
 import com.aplazame.sdk.network.response.AvailabilityCallback;
 import com.aplazame.sdk.network.rest.CheckoutService;
 import com.google.gson.Gson;
@@ -70,34 +68,6 @@ public class AplazameApiManager {
         this.debug = debug;
     }
 
-    public void checkAvailability(Checkout checkout, final AvailabilityCallback callback) {
-        Map<String, String> header = headerRequest();
-        Retrofit retrofit = configureRetrofit();
-        CheckoutToCheckoutDtoMapper mapper = new CheckoutToCheckoutDtoMapper();
-
-        CheckoutDto checkoutDto = mapper.transformDomainToDto(checkout);
-
-        final CheckoutService service = retrofit.create(CheckoutService.class);
-
-        Call<CheckoutAvailabilityDto> call = service.checkout(header,
-                checkoutDto.getOrder().getTotalAmount(), checkoutDto.getOrder().getCurrency());
-        call.enqueue(new Callback<CheckoutAvailabilityDto>() {
-            @Override
-            public void onResponse(Call<CheckoutAvailabilityDto> call, Response<CheckoutAvailabilityDto> response) {
-                if (response.isSuccessful() && response.body().isAllowed()) {
-                    callback.onAvailabilitySuccess();
-                } else {
-                    callback.onAvailabilityFailure();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CheckoutAvailabilityDto> call, Throwable t) {
-                callback.onFailure();
-            }
-        });
-    }
-
     public void checkAvailability(Double amount, String currency, final AvailabilityCallback callback) {
         Map<String, String> header = headerRequest();
         Retrofit retrofit = configureRetrofit();
@@ -108,10 +78,10 @@ public class AplazameApiManager {
         call.enqueue(new Callback<CheckoutAvailabilityDto>() {
             @Override
             public void onResponse(Call<CheckoutAvailabilityDto> call, Response<CheckoutAvailabilityDto> response) {
-                if (response.isSuccessful() && response.body().isAllowed()) {
-                    callback.onAvailabilitySuccess();
+                if (response.isSuccessful() && response.body().allowed) {
+                    callback.onAvailable();
                 } else {
-                    callback.onAvailabilityFailure();
+                    callback.onNotAvailable();
                 }
             }
 
@@ -123,15 +93,12 @@ public class AplazameApiManager {
     }
 
     public String requestCheckout(Checkout checkout) {
-        CheckoutToCheckoutDtoMapper mapper = new CheckoutToCheckoutDtoMapper();
-        CheckoutDto checkoutDto = mapper.transformDomainToDto(checkout);
-
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
 
-        Type type = new TypeToken<CheckoutDto>(){}.getType();
-        String json = gson.toJson(checkoutDto, type);
+        Type type = new TypeToken<Checkout>(){}.getType();
+        String json = gson.toJson(checkout, type);
 
         return String.format(POST_MESSAGE_CHECKOUT_DATA, json);
     }

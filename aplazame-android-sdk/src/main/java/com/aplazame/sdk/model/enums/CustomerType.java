@@ -14,5 +14,7 @@ public enum CustomerType {
         this.value = value;
     }
 
-    public String getValue() { return value; }
+    public String getValue() {
+        return value;
+    }
 }

@@ -6,7 +6,7 @@ Add this in your root `build.gradle` file (**not** your module `build.gradle` fi
 
 ```gradle
 allprojects {
-	repositories {
+    repositories {
         maven { url "https://jitpack.io" }
     }
 }
@@ -15,7 +15,7 @@ allprojects {
 Then, add the library to your module `build.gradle`
 ```gradle
 dependencies {
-    compile 'com.github.xxx'
+    compile 'com.github.aplazame:android-sdk:master-SNAPSHOT'
 }
 ```
 
@@ -217,21 +217,21 @@ AplazameSDK.setConfiguration("my public key", true)
 3) Check Aplazame available
 ```java
 AplazameSDK.checkAvailability(2000.0, "EUR", new AvailabilityCallback() {
-            @Override
-            public void onAvailable() {
-                // Enable checkout button for instance
-            }
+    @Override
+    public void onAvailable() {
+        // Enable checkout button for instance
+    }
 
-            @Override
-            public void onNotAvailable() {
-                // Hide the checkout button for instance
-            }
+    @Override
+    public void onNotAvailable() {
+        // Hide the checkout button for instance
+    }
 
-            @Override
-            public void onFailure() {
-                // Hide the checkout button for instance (unknown error)
-            }
-        });
+    @Override
+    public void onFailure() {
+        // Hide the checkout button for instance (unknown error)
+    }
+});
 ```
 
 
@@ -241,43 +241,43 @@ AplazameSDK.checkAvailability(2000.0, "EUR", new AvailabilityCallback() {
 
 ```java
 AplazameSDK.initializeAplazameWebView(webView, new JsWebViewEvents() {
-            @Override
-            public void onPageStarted() {}
+    @Override
+    public void onPageStarted() {}
 
-            @Override
-            public void onPageFinished() {}
+    @Override
+    public void onPageFinished() {}
 
-            @Override
-            public void onReadyEvent() {}
+    @Override
+    public void onReadyEvent() {}
 
-            @Override
-            public void onStatusChangeEvent(String status) {
-                switch (status) {
-                    case SUCCESS:
-                        break;
-                    case PENDING:
-                        break;
-                    case KO:
-                        break;
-                }
-            }
+    @Override
+    public void onStatusChangeEvent(String status) {
+        switch (status) {
+            case SUCCESS:
+                break;
+            case PENDING:
+                break;
+            case KO:
+                break;
+        }
+    }
 
-            @Override
-            public void onCloseEvent(String status) {
-                switch (status) {
-                    case SUCCESS:
-                        break;
-                    case PENDING:
-                        finish();
-                        break;
-                    case DISMISS:
-                        finish();
-                        break;
-                    case KO:
-                        break;
-                }
-            }
-        });
+    @Override
+    public void onCloseEvent(String status) {
+        switch (status) {
+            case SUCCESS:
+                break;
+            case PENDING:
+                finish();
+                break;
+            case DISMISS:
+                finish();
+                break;
+            case KO:
+                break;
+        }
+    }
+});
 ```
 
 ![alt text](https://raw.githubusercontent.com/aplazame/android-sdk/master/image2.png)
@@ -286,7 +286,7 @@ License
 -------
 
 Aplazame is Copyright (c) 2018 Aplazame, inc. It is free software, and may be
-redistributed under the terms specified in the [LICENSE](https://raw.githubusercontent.com/aplazame/android-sdk/master/LICENSE.txt) file.
+redistributed under the terms specified in the [LICENSE](/LICENSE.txt) file.
 
 About
 -----

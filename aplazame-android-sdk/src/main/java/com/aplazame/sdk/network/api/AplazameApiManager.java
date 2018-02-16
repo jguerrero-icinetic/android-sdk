@@ -5,6 +5,7 @@ import com.aplazame.sdk.network.authenticator.AuthInterceptor;
 import com.aplazame.sdk.network.model.CheckoutAvailabilityDto;
 import com.aplazame.sdk.network.response.AvailabilityCallback;
 import com.aplazame.sdk.network.rest.CheckoutService;
+import com.aplazame.sdk.network.utils.MapperUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -74,7 +75,7 @@ public class AplazameApiManager {
 
         final CheckoutService service = retrofit.create(CheckoutService.class);
 
-        Call<CheckoutAvailabilityDto> call = service.checkout(header, amount, currency);
+        Call<CheckoutAvailabilityDto> call = service.checkout(header, MapperUtils.doubleToDecimal(amount), currency);
         call.enqueue(new Callback<CheckoutAvailabilityDto>() {
             @Override
             public void onResponse(Call<CheckoutAvailabilityDto> call, Response<CheckoutAvailabilityDto> response) {

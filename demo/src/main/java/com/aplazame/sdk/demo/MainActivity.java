@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!accessToken.getText().toString().trim().isEmpty()) {
                     AplazameSDK.setConfiguration(accessToken.getText().toString().trim(), DEBUG);
 
-                    AplazameSDK.checkAvailability(120.50, "EUR", new AvailabilityCallback() {
+                    AplazameSDK.checkAvailability(132.06, "EUR", new AvailabilityCallback() {
                         @Override
                         public void onAvailable() {
                             // Enable checkout button for instance
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
         articles.add(article3);
 
         Order order = new Order();
-        order.total_amount = MapperUtils.doubleToDecimal(20.00);
+        order.total_amount = MapperUtils.doubleToDecimal(132.06);
         order.currency = "EUR";
         order.discount = MapperUtils.doubleToDecimal(3.62);
         order.discount_rate = MapperUtils.doubleToDecimal(1.0);

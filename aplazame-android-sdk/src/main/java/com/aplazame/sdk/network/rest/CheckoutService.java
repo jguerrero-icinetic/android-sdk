@@ -11,5 +11,5 @@ import retrofit2.http.Query;
 
 public interface CheckoutService {
     @GET("checkout/button")
-    Call<CheckoutAvailabilityDto> checkout(@HeaderMap Map<String, String> headers, @Query("amount") Double amount, @Query("currency") String currency);
+    Call<CheckoutAvailabilityDto> checkout(@HeaderMap Map<String, String> headers, @Query("amount") Integer amount, @Query("currency") String currency);
 }

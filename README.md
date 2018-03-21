@@ -48,6 +48,29 @@ AplazameSDK.initializeAplazameWebView(WebView webView, JsWebViewEvents jsWebView
 - `onStatusChangeEvent (String status)`: Indicates a change of status of the checkout when it already has a result and updates the session while it remains open. Equivalent to the "status-change" event. Possible status values: "success", "pending" or "ko".
 - `onCloseEvent (String status)`: Indicates that the checkout has been closed. Possible status values: "success", "pending", "dismiss" or "ko".
 
+Add AplazameSDK in your onActivityResult
+
+```java
+AplazameSDK.onActivityResult(requestCode, resultCode, intent);
+```
+
+Add AplazameSDK in your onRequestPermissionsResult. There are 3 options:
+
+1) A toast with a default message if you don't accept the app permissions
+```java
+AplazameSDK.onActivityResult(requestCode, resultCode, intent);
+```
+
+2) A toast with a custom message if you don't accept the app permissions
+```java
+AplazameSDK.onActivityResult(requestCode, resultCode, intent, String);
+```
+
+3) A listener to customize your response. The methods are onAcceptPermissions() and onDeclinePermissions().
+```java
+AplazameSDK.onActivityResult(requestCode, resultCode, intent, OnRequestPermissionsListener);
+```
+
 More information about status event: https://aplazame.com/docs/api/checkout-parameters/checkout-postmessage/
 
 ## Usage example
@@ -281,6 +304,26 @@ AplazameSDK.initializeAplazameWebView(webView, new JsWebViewEvents() {
 ```
 
 ![alt text](https://raw.githubusercontent.com/aplazame/android-sdk/master/image2.png)
+
+5) Add SDK in onActivityResult
+
+```java
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    super.onActivityResult(requestCode, resultCode, intent);
+    AplazameSDK.onActivityResult(requestCode, resultCode, intent);
+}
+```
+
+6) Add SDK in onRequestPermissionsResult
+
+```java
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    super.onActivityResult(requestCode, resultCode, intent);
+    AplazameSDK.onRequestPermissionsResult(this, requestCode, grantResults);
+}
+```
 
 License
 -------

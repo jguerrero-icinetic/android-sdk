@@ -56,17 +56,17 @@ AplazameSDK.onActivityResult(requestCode, resultCode, intent);
 
 Add AplazameSDK in your onRequestPermissionsResult. There are 3 options:
 
-- ` A toast with a default message if you don't accept the app permissions
+- `A toast with a default message if you don't accept the app permissions
 ```java
 AplazameSDK.onActivityResult(requestCode, resultCode, intent);
 ```
 
-- ` A toast with a custom message if you don't accept the app permissions
+- `A toast with a custom message if you don't accept the app permissions
 ```java
 AplazameSDK.onActivityResult(requestCode, resultCode, intent, String);
 ```
 
-- ` A listener to customize your response. The methods are onAcceptPermissions() and onDeclinePermissions().
+- `A listener to customize your response. The methods are onAcceptPermissions() and onDeclinePermissions().
 ```java
 AplazameSDK.onActivityResult(requestCode, resultCode, intent, OnRequestPermissionsListener);
 ```

@@ -1,5 +1,7 @@
 package com.aplazame.sdk.demo;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +21,7 @@ public class WebViewAplazameActivity extends AppCompatActivity {
         final WebView webView = findViewById(R.id.webview);
         final ProgressBar progressBar = findViewById(R.id.progress);
 
-        AplazameSDK.initializeAplazameWebView(webView, new JsWebViewEvents() {
+        AplazameSDK.initializeAplazameWebView(this, webView, new JsWebViewEvents() {
             @Override
             public void onPageStarted() {}
 
@@ -60,5 +62,17 @@ public class WebViewAplazameActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        AplazameSDK.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AplazameSDK.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 }

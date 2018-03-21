@@ -305,7 +305,7 @@ AplazameSDK.initializeAplazameWebView(webView, new JsWebViewEvents() {
 
 ![alt text](https://raw.githubusercontent.com/aplazame/android-sdk/master/image2.png)
 
-5) Add SDK in onActivityResult
+5) Add Aplazame SDK in onActivityResult
 
 ```java
 @Override
@@ -315,7 +315,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent intent) 
 }
 ```
 
-6) Add SDK in onRequestPermissionsResult
+6) Add Aplazame SDK in onRequestPermissionsResult
 
 ```java
 @Override

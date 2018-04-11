@@ -39,7 +39,7 @@ The **AvailabilityCallback** contains the following 3 methods:
 
 Initialize the checkout in a WebView
 ```java
-AplazameSDK.initializeAplazameWebView(WebView webView, JsWebViewEvents jsWebViewEvents);
+AplazameSDK.initializeAplazameWebView(Activity activity, WebView webView, JsWebViewEvents jsWebViewEvents);
 ```
 **JsWebViewEvents** interface contains these 5 methods:
 - `onPageStarted`: WebView event. Notify the host application that Aplazame page has started loading. 

@@ -40,8 +40,10 @@ public class AplazameSDK {
     private static String imagePath;
     private static ValueCallback<Uri> uriCallback;
     private static ValueCallback<Uri[]> urisCallback;
+    private static ValueCallback<Uri[]> filePathCallback;
     private final static int REQUEST_CODE_FILE_CHOOSER = 4441;
     private final static int REQUEST_CODE_PERMISSIONS = 4442;
+    private static Activity activity;
 
     public static void setConfiguration(String token, Boolean debug) {
         aplazameApiManager = new AplazameApiManager(token, debug);
@@ -58,7 +60,8 @@ public class AplazameSDK {
         return aplazameApiManager.initializeCheckoutUrl();
     }
 
-    public static void initializeAplazameWebView(final Activity activity, final WebView webView, final JsWebViewEvents events) {
+    public static void initializeAplazameWebView(final Activity act, final WebView webView, final JsWebViewEvents events) {
+        activity = act;
         checkAplazameSdkConfiguration();
         checkCheckout();
         checkWebView(webView);
@@ -66,13 +69,6 @@ public class AplazameSDK {
         WebSettings webSettings = webView.getSettings();
         webSettings.setAllowFileAccess(true);
         webSettings.setJavaScriptEnabled(true);
-
-        if(Build.VERSION.SDK_INT >=23 && (ContextCompat.checkSelfPermission
-                (activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
-                    REQUEST_CODE_PERMISSIONS);
-        }
 
         if (Build.VERSION.SDK_INT >= 21){
             webSettings.setMixedContentMode(0);
@@ -109,7 +105,7 @@ public class AplazameSDK {
             }
         });
 
-        webView.setWebChromeClient(new WebChromeClient(){
+        webView.setWebChromeClient(new WebChromeClient() {
             //For Android 4.1+
             public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
                 uriCallback = uploadMsg;
@@ -120,51 +116,64 @@ public class AplazameSDK {
             }
             //For Android 5.0+
             public boolean onShowFileChooser(
-                    WebView webView, ValueCallback<Uri[]> filePathCallback,
+                    WebView webView, ValueCallback<Uri[]> filePath,
                     WebChromeClient.FileChooserParams fileChooserParams) {
-                if (urisCallback != null) {
-                    urisCallback.onReceiveValue(null);
-                }
-                urisCallback = filePathCallback;
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                filePathCallback = filePath;
 
-                if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-                    File photoFile = null;
-                    try {
-                        photoFile = new ImageUtils().createImageFile();
-                        takePictureIntent.putExtra("PhotoPath", imagePath);
-                    } catch(IOException ex) {
-                        Log.e(TAG, "Image file creation failed", ex);
-                    }
-                    if (photoFile != null) {
-                        imagePath = "file:" + photoFile.getAbsolutePath();
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                    } else {
-                        takePictureIntent = null;
-                    }
-                }
-
-                Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                contentSelectionIntent.setType("image/*");
-                Intent intentArray[];
-
-                if (takePictureIntent != null) {
-                    intentArray = new Intent[] {takePictureIntent};
+                if(Build.VERSION.SDK_INT >=23 && (ContextCompat.checkSelfPermission
+                        (activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                        ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA},
+                            REQUEST_CODE_PERMISSIONS);
                 } else {
-                    intentArray = new Intent[0];
+                    uploadImage();
                 }
-
-                Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-                chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-                chooserIntent.putExtra(Intent.EXTRA_TITLE, "");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-
-                activity.startActivityForResult(chooserIntent, REQUEST_CODE_FILE_CHOOSER);
 
                 return true;
             }
         });
+    }
+
+    private static void uploadImage() {
+        if (urisCallback != null) {
+            urisCallback.onReceiveValue(null);
+        }
+        urisCallback = filePathCallback;
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = new ImageUtils().createImageFile();
+                takePictureIntent.putExtra("PhotoPath", imagePath);
+            } catch(IOException ex) {
+                Log.e(TAG, "Image file creation failed", ex);
+            }
+            if (photoFile != null) {
+                imagePath = "file:" + photoFile.getAbsolutePath();
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+            } else {
+                takePictureIntent = null;
+            }
+        }
+
+        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        contentSelectionIntent.setType("image/*");
+        Intent intentArray[];
+
+        if (takePictureIntent != null) {
+            intentArray = new Intent[] {takePictureIntent};
+        } else {
+            intentArray = new Intent[0];
+        }
+
+        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+        chooserIntent.putExtra(Intent.EXTRA_TITLE, "");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+
+        activity.startActivityForResult(chooserIntent, REQUEST_CODE_FILE_CHOOSER);
     }
 
     public static void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -175,7 +184,7 @@ public class AplazameSDK {
 
             if (resultCode== Activity.RESULT_OK) {
                 if (requestCode == REQUEST_CODE_FILE_CHOOSER) {
-                    if (null == urisCallback) {
+                    if (urisCallback == null) {
                         return;
                     }
                     if (intent == null || intent.getData() == null) {
@@ -191,8 +200,12 @@ public class AplazameSDK {
                     }
                 }
             }
-            urisCallback.onReceiveValue(results);
-            urisCallback = null;
+            try {
+                urisCallback.onReceiveValue(results);
+            } catch (IllegalStateException e) {
+            } finally {
+                urisCallback = null;
+            }
         } else {
             if (requestCode == REQUEST_CODE_FILE_CHOOSER) {
                 if (null == uriCallback) {
@@ -200,8 +213,13 @@ public class AplazameSDK {
                 }
 
                 Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-                uriCallback.onReceiveValue(result);
-                uriCallback = null;
+
+                try {
+                    uriCallback.onReceiveValue(result);
+                } catch (IllegalStateException e) {
+                } finally {
+                    uriCallback = null;
+                }
             }
         }
     }
@@ -212,7 +230,7 @@ public class AplazameSDK {
 
     private static void checkAplazameSdkConfiguration() {
         if (aplazameApiManager == null) {
-            throw new IllegalStateException("You must set the Aplazame SDK configuration first");
+            activity.finish();
         }
     }
 
@@ -233,9 +251,9 @@ public class AplazameSDK {
             if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 // Ok
+                uploadImage();
             } else {
-                Toast.makeText(activity, "You must accept the app permissions", Toast.LENGTH_SHORT).show();
-                activity.finish();
+                Toast.makeText(activity, activity.getString(R.string.permission_must_accept), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -245,9 +263,9 @@ public class AplazameSDK {
             if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 // Ok
+                uploadImage();
             } else {
-                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
-                activity.finish();
+                Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -256,6 +274,7 @@ public class AplazameSDK {
         if (requestCode == REQUEST_CODE_PERMISSIONS){
             if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                uploadImage();
                 onRequestPermissionsListener.onAcceptPermissions();
             } else {
                 onRequestPermissionsListener.onDeclinePermissions();

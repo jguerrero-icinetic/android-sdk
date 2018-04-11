@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">AplazameAndroidSdk</string>
+    <string name="app_name" translatable="false">AplazameAndroidSdk</string>
+
+    <string name="permission_must_accept">You must accept the app permissions</string>
 </resources>
